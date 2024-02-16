@@ -10,6 +10,11 @@ namespace GastosAPI.Repository.Implementacion
     {
         private readonly GastosDbContext _dbContext;
 
+        public MetodoPagoRepository(GastosDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         public async Task<IQueryable<MetodoPago>> Consultar(Expression<Func<MetodoPago, bool>> filtro = null)
         {
             try
@@ -27,6 +32,7 @@ namespace GastosAPI.Repository.Implementacion
         {
             try
             {
+                metodoPago.IdMetodoPago = Guid.NewGuid();
                 _dbContext.Set<MetodoPago>().Add(metodoPago);
                 await _dbContext.SaveChangesAsync();
                 return metodoPago;
@@ -52,7 +58,7 @@ namespace GastosAPI.Repository.Implementacion
             }
         }
 
-        public async Task<MetodoPago> GetTransaccion(Expression<Func<MetodoPago, bool>> filtro)
+        public async Task<MetodoPago> GetMetodoPago(Expression<Func<MetodoPago, bool>> filtro)
         {
             try
             {

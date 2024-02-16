@@ -4,7 +4,9 @@ using GastosAPI.Repository.Implementacion;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using ServiceReference;
 using System.Text;
+using static ServiceReference.Tipo_Cambio_BCNSoapClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,6 +78,17 @@ builder.Services.AddAutoMapper(typeof(GastosAPI.Utilidades.AutoMapper));
 
 //Repositorios
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<ILugarRepository, LugarRepository>();
+builder.Services.AddScoped<IMetodoPagoRepository, MetodoPagoRepository>();
+builder.Services.AddScoped<ITasaCambioRepository, TasaCambioRepositoty>();
+builder.Services.AddScoped(serviceProvider =>
+{
+    // Aquí puedes crear una instancia de Tipo_Cambio_BCNSoapClient con los parámetros necesarios
+    // Puedes obtener otros servicios del contenedor si es necesario
+    var endpointConfiguration = EndpointConfiguration.Tipo_Cambio_BCNSoap;
+    return new Tipo_Cambio_BCNSoapClient(endpointConfiguration);
+});
 
 var app = builder.Build();
 

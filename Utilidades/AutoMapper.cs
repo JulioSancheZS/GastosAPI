@@ -13,6 +13,9 @@ namespace GastosAPI.Utilidades
             .ForMember(destino => destino.NombreCompleto,
             opt => opt.MapFrom(origen => origen.PrimerNombre + " " + origen.SegundoNombre));
 
+            CreateMap<Usuario, TasaCambioDTO>().ReverseMap();
+
+            //Register
             CreateMap<Usuario, RegisterDTO>().ReverseMap();
 
             //Balance

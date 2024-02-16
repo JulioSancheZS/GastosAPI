@@ -34,21 +34,29 @@ namespace GastosAPI.Controllers
 
             try
             {
+
+                Usuario findUser = await _authenticationRepository.ObtenerUsuario(x => x.Correo == usuarioDTO.Correo);
+
+                if (findUser != null)
+                {
+                    _responseApi = new ResponseApi<RegisterDTO>() { status = true, msg = "El corre ya existe, intente con otro correo", value = null };
+                    return StatusCode(StatusCodes.Status200OK, _responseApi);
+                }
+
                 Usuario _usuario = _mapper.Map<Usuario>(usuarioDTO);
                 Usuario _newUsuario = await _authenticationRepository.Registro(_usuario);
 
                 if (_newUsuario != null)
                 {
-                    _responseApi = new ResponseApi<RegisterDTO>() { status = true, msg = "ok", value = _mapper.Map<RegisterDTO>(_newUsuario) };
+                    _responseApi = new ResponseApi<RegisterDTO>() { status = true, msg = "Se ha registrado correctamente", value = _mapper.Map<RegisterDTO>(_newUsuario) };
                 }
                 else
-                    _responseApi = new ResponseApi<RegisterDTO>() { status = false, msg = "No se pudo registrar el usuario" };
+                    _responseApi = new ResponseApi<RegisterDTO>() { status = false, msg = "No se pudo registrar su usuario" };
 
                 return StatusCode(StatusCodes.Status200OK, _responseApi);
             }
             catch (Exception ex)
             {
-
                 _responseApi = new ResponseApi<RegisterDTO>() { status = false, msg = ex.Message, value = null };
                 return StatusCode(StatusCodes.Status500InternalServerError, _responseApi);
             }
@@ -62,7 +70,7 @@ namespace GastosAPI.Controllers
 
             try
             {
-                Usuario _usuario = await _authenticationRepository.ObtenerUsuario(x => x.Correo == loginDTO.Email);
+                Usuario _usuario = await _authenticationRepository.ObtenerUsuario(x => x.Correo == loginDTO.Correo);
 
                 if (_usuario == null || !VerifyPassword(loginDTO.Password, _usuario.Password, _usuario.PaswordHash))
                 {
@@ -76,7 +84,10 @@ namespace GastosAPI.Controllers
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim("IdUsuario", _usuario.IdUsuario.ToString()),
-                        new Claim("Nombre", _usuario.PrimerNombre + " " + _usuario.SegundoNombre)
+                        new Claim("Nombre", _usuario.PrimerNombre + " " + _usuario.SegundoNombre),
+                        new Claim("Correo", _usuario.Correo),
+                        new Claim("PrimerNombre", _usuario.Correo),
+                        new Claim("PrimerApellido", _usuario.Correo),
                 };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"].PadRight(16)));
@@ -106,6 +117,5 @@ namespace GastosAPI.Controllers
             string combinedPassword = BCrypt.Net.BCrypt.HashPassword(userInputPassword, storedSalt);
             return combinedPassword == storedHashedPassword;
         }
-
     }
 }

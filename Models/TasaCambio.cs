@@ -7,11 +7,9 @@ public partial class TasaCambio
 {
     public Guid IdTasaCambio { get; set; }
 
-    public decimal? Tasa { get; set; }
+    public DateTime? Fecha { get; set; }
 
-    public string? Dia { get; set; }
+    public double? TipoCambio { get; set; }
 
-    public string? Mes { get; set; }
-
-    public string? Anio { get; set; }
+    public DateTime? FechaRegistro { get; set; }
 }

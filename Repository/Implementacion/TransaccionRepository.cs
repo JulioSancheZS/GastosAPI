@@ -24,10 +24,8 @@ namespace GastosAPI.Repository.Implementacion
             }
             catch 
             {
-
                 throw;
             }
-
         }
 
         public async Task<IQueryable<Transaccion>> Consultar(Expression<Func<Transaccion, bool>> filtro = null)
@@ -47,6 +45,7 @@ namespace GastosAPI.Repository.Implementacion
         {
             try
             {
+                transaccion.IdTransaccion = Guid.NewGuid();
                 transaccion.FechaTransaccion = DateTime.Now;
                 _dbContext.Set<Transaccion>().Add(transaccion);
                 await _dbContext.SaveChangesAsync();
@@ -81,7 +80,6 @@ namespace GastosAPI.Repository.Implementacion
             }
             catch 
             {
-
                 throw;
             }
         }

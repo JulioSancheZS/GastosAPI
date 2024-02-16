@@ -5,7 +5,8 @@ namespace GastosAPI.Repository.Contrato
 {
     public interface ITasaCambioRepository
     {
-        Task<TasaCambio> Crear(TasaCambio tasaCambio);
         Task<IQueryable<TasaCambio>> Consultar(Expression<Func<TasaCambio, bool>> filtro = null);
+        Task<bool> InsetarMes(DateTime fecha);
+        Task<TasaCambio> GetTasaCambio(DateTime fecha);
     }
 }

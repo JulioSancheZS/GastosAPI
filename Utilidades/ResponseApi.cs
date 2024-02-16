@@ -1,4 +1,6 @@
-﻿namespace GastosAPI.Utilidades
+﻿using GastosAPI.DTO;
+
+namespace GastosAPI.Utilidades
 {
     public class ResponseApi<T>
     {

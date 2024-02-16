@@ -32,6 +32,7 @@ namespace GastosAPI.Repository.Implementacion
         {
             try
             {
+                lugar.IdLugar = Guid.NewGuid();
                 _dbContext.Set<Lugar>().Add(lugar);
                 await _dbContext.SaveChangesAsync();
                 return lugar;
@@ -57,7 +58,7 @@ namespace GastosAPI.Repository.Implementacion
             }
         }
 
-        public async Task<Lugar> GetTransaccion(Expression<Func<Lugar, bool>> filtro)
+        public async Task<Lugar> GetLugar(Expression<Func<Lugar, bool>> filtro)
         {
             try
             {

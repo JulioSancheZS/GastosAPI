@@ -30,9 +30,8 @@ public partial class GastosDbContext : DbContext
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//    => optionsBuilder.UseSqlServer("Server=localhost;Database=GastosDB;User Id=sa;Password=1234;TrustServerCertificate=true;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=localhost;Database=GastosDB;Integrated Security=true;TrustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -88,10 +87,8 @@ public partial class GastosDbContext : DbContext
             entity.ToTable("TasaCambio");
 
             entity.Property(e => e.IdTasaCambio).ValueGeneratedNever();
-            entity.Property(e => e.Anio).HasMaxLength(50);
-            entity.Property(e => e.Dia).HasMaxLength(50);
-            entity.Property(e => e.Mes).HasMaxLength(50);
-            entity.Property(e => e.Tasa).HasColumnType("money");
+            entity.Property(e => e.Fecha).HasColumnType("date");
+            entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Transaccion>(entity =>

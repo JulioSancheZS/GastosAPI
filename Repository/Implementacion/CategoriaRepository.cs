@@ -33,6 +33,8 @@ namespace GastosAPI.Repository.Implementacion
         {
             try
             {
+                categoria.IdCategoria = Guid.NewGuid();
+
                 _dbContext.Set<Categoria>().Add(categoria);
                 await _dbContext.SaveChangesAsync();
                 return categoria;
@@ -47,6 +49,7 @@ namespace GastosAPI.Repository.Implementacion
         {
             try
             {
+               
                 _dbContext.Update(categoria);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -56,10 +59,9 @@ namespace GastosAPI.Repository.Implementacion
 
                 throw;
             }
-
         }
 
-        public async Task<Categoria> GetTransaccion(Expression<Func<Categoria, bool>> filtro)
+        public async Task<Categoria> GetCategoria(Expression<Func<Categoria, bool>> filtro)
         {
             try
             {
@@ -67,7 +69,6 @@ namespace GastosAPI.Repository.Implementacion
             }
             catch
             {
-
                 throw;
             }
         }

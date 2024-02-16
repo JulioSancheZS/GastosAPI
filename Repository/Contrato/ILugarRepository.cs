@@ -7,7 +7,7 @@ namespace GastosAPI.Repository.Contrato
     {
         Task<Lugar> Crear(Lugar lugar);
         Task<bool> Editar(Lugar lugar);
-        Task<Lugar> GetTransaccion(Expression<Func<Lugar, bool>> filtro);
+        Task<Lugar> GetLugar(Expression<Func<Lugar, bool>> filtro);
         Task<IQueryable<Lugar>> Consultar(Expression<Func<Lugar, bool>> filtro = null);
     }
 }
