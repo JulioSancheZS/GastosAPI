@@ -14,4 +14,6 @@ public partial class Balance
     public DateTime? FechaActualizacion { get; set; }
 
     public virtual Usuario? IdUsuarioNavigation { get; set; }
+
+    public virtual ICollection<Ingreso> Ingresos { get; set; } = new List<Ingreso>();
 }

@@ -82,6 +82,8 @@ builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<ILugarRepository, LugarRepository>();
 builder.Services.AddScoped<IMetodoPagoRepository, MetodoPagoRepository>();
 builder.Services.AddScoped<ITasaCambioRepository, TasaCambioRepositoty>();
+builder.Services.AddScoped<ITransaccionRepository, TransaccionRepository>();
+
 builder.Services.AddScoped(serviceProvider =>
 {
     // Aquí puedes crear una instancia de Tipo_Cambio_BCNSoapClient con los parámetros necesarios

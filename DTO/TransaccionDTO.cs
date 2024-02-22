@@ -20,8 +20,8 @@
 
         public DateTime? FechaTransaccion { get; set; }
 
-        public string NombreCategoria { get; set; }
-        public string NombreLugar { get; set; }
-        public string NombreMetodoPago { get; set; }
+        public string? NombreCategoria { get; set; }
+        public string? NombreLugar { get; set; }
+        public string? NombreMetodoPago { get; set; }
     }
 }

@@ -19,6 +19,8 @@ public partial class GastosDbContext : DbContext
 
     public virtual DbSet<Categoria> Categoria { get; set; }
 
+    public virtual DbSet<Ingreso> Ingresos { get; set; }
+
     public virtual DbSet<Lugar> Lugars { get; set; }
 
     public virtual DbSet<MetodoPago> MetodoPagos { get; set; }
@@ -29,9 +31,9 @@ public partial class GastosDbContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost;Database=GastosDB;Integrated Security=true;TrustServerCertificate=true;");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//        => optionsBuilder.UseSqlServer("Server=localhost;Database=GastosDB;User Id=sa;Password=1234;TrustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -58,6 +60,20 @@ public partial class GastosDbContext : DbContext
             entity.Property(e => e.Color).HasMaxLength(50);
             entity.Property(e => e.Icono).HasMaxLength(50);
             entity.Property(e => e.NombreCategoria).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<Ingreso>(entity =>
+        {
+            entity.HasKey(e => e.IdIngreso);
+
+            entity.Property(e => e.IdIngreso).ValueGeneratedNever();
+            entity.Property(e => e.Descripcion).HasMaxLength(200);
+            entity.Property(e => e.FechaIngreso).HasColumnType("datetime");
+            entity.Property(e => e.Monto).HasColumnType("money");
+
+            entity.HasOne(d => d.IdBalanceNavigation).WithMany(p => p.Ingresos)
+                .HasForeignKey(d => d.IdBalance)
+                .HasConstraintName("FK_Ingresos_Balance");
         });
 
         modelBuilder.Entity<Lugar>(entity =>

@@ -46,7 +46,6 @@ namespace GastosAPI.Repository.Implementacion
             try
             {
                 transaccion.IdTransaccion = Guid.NewGuid();
-                transaccion.FechaTransaccion = DateTime.Now;
                 _dbContext.Set<Transaccion>().Add(transaccion);
                 await _dbContext.SaveChangesAsync();
                 return transaccion;
