@@ -33,6 +33,8 @@ namespace GastosAPI.Utilidades
             //TipoCambio
             CreateMap<TasaCambio, TasaCambioDTO>().ReverseMap();
 
+            CreateMap<Ingreso, IngresosDTO>().ReverseMap();
+
             //Transaccion
             CreateMap<Transaccion, TransaccionDTO>()
                 .ForMember(destino => destino.NombreCategoria,
@@ -46,7 +48,6 @@ namespace GastosAPI.Utilidades
                 .ForMember(destino => destino.IdCategoriaNavigation, opt => opt.Ignore())
                 .ForMember(destino => destino.IdMetodoPagoNavigation, opt => opt.Ignore())
                 .ForMember(destino => destino.IdLugarNavigation, opt => opt.Ignore()
-
                 );
         }
     }

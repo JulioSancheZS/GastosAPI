@@ -4,7 +4,7 @@ namespace GastosAPI.DTO
 {
     public class BalanceDTO
     {
-        public Guid IdBalance { get; set; }
+        public Guid? IdBalance { get; set; }
 
         public Guid? IdUsuario { get; set; }
 

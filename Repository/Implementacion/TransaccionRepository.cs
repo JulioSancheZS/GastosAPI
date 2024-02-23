@@ -46,6 +46,14 @@ namespace GastosAPI.Repository.Implementacion
             try
             {
                 transaccion.IdTransaccion = Guid.NewGuid();
+                Balance balance = await _dbContext.Balances.FirstOrDefaultAsync(s => s.IdUsuario == transaccion.IdUsuario);
+                if (balance != null)
+                {
+                    balance.Monto -= transaccion.Monto;
+                    //balance.FechaActualizacion = DateTime.Now;
+                    _dbContext.Update(balance);
+
+                }
                 _dbContext.Set<Transaccion>().Add(transaccion);
                 await _dbContext.SaveChangesAsync();
                 return transaccion;

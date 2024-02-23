@@ -85,9 +85,7 @@ namespace GastosAPI.Controllers
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim("IdUsuario", _usuario.IdUsuario.ToString()),
                         new Claim("Nombre", _usuario.PrimerNombre + " " + _usuario.SegundoNombre),
-                        new Claim("Correo", _usuario.Correo),
-                        new Claim("PrimerNombre", _usuario.Correo),
-                        new Claim("PrimerApellido", _usuario.Correo),
+                        new Claim("Correo", _usuario.Correo)
                 };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"].PadRight(16)));

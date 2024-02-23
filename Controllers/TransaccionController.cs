@@ -23,6 +23,19 @@ namespace GastosAPI.Controllers
             _transaccionRepository = transaccionRepository;
         }
 
+        private Guid? ObtenerIdUsuarioDesdeToken()
+        {
+            var claim = User.Claims.FirstOrDefault(c => c.Type == "IdUsuario");
+
+            if (claim != null && Guid.TryParse(claim.Value, out Guid idUsuario))
+            {
+                return idUsuario;
+            }
+
+            // Manejar el caso donde no se puede obtener el IdUsuario
+            return null;
+        }
+
         [HttpGet]
         public async Task<IActionResult> getTransaccion(DateTime mes)
         {
@@ -30,8 +43,10 @@ namespace GastosAPI.Controllers
 
             try
             {
+                Guid? idUsuario = ObtenerIdUsuarioDesdeToken();
+
                 List<TransaccionDTO> _lista = new List<TransaccionDTO>();
-                IQueryable<Transaccion> query = await _transaccionRepository.Consultar(x => x.FechaTransaccion!.Value.Year == mes.Year && x.FechaTransaccion.Value.Month == mes.Month);
+                IQueryable<Transaccion> query = await _transaccionRepository.Consultar(x => x.FechaTransaccion!.Value.Year == mes.Year && x.FechaTransaccion.Value.Month == mes.Month && x.IdUsuario == idUsuario);
                 query = query.Include(r => r.IdCategoriaNavigation).Include(x => x.IdMetodoPagoNavigation).Include(x => x.IdLugarNavigation).OrderBy(x => x.FechaTransaccion);
 
                 _lista = _mapper.Map<List<TransaccionDTO>>(query.ToList());
@@ -59,8 +74,10 @@ namespace GastosAPI.Controllers
 
             try
             {
-                Transaccion _transaccion = _mapper.Map<Transaccion>(request);
+                Guid? idUsuario = ObtenerIdUsuarioDesdeToken();
 
+                Transaccion _transaccion = _mapper.Map<Transaccion>(request);
+                _transaccion.IdUsuario = idUsuario;
                 Transaccion newTransaccion = await _transaccionRepository.CrearTransaccion(_transaccion);
                 if (newTransaccion != null)
                 {

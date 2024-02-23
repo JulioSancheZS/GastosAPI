@@ -15,5 +15,7 @@ public partial class Ingreso
 
     public string? Descripcion { get; set; }
 
+    public Guid? IdUsuario { get; set; }
+
     public virtual Balance? IdBalanceNavigation { get; set; }
 }
