@@ -220,7 +220,7 @@ Este endpoint te permite registrar las transacciones en tu cuenta para llevar un
 #### Parámetros de consulta
 
 - `idUsuario`: Este parámetro se utiliza para especificar el usuario del cual se desea conocer el saldo. El backend utilizará automáticamente el usuario actualmente autenticado, extrayendo la información del token de autenticación.
-- `idTransaccion`:  Este identificador se genera automáticamente en el backend como un GUID único para cada ingreso registrado.
+- `idTransaccion`:  Este identificador se genera automáticamente en el backend como un GUID único para cada transaccón registrada.
 
 
 - #### Cuerpo de la solicitud
