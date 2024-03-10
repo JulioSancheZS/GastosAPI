@@ -65,6 +65,7 @@ namespace GastosAPI.Repository.Implementacion
                     };
 
                     _dbContext.Set<Balance>().Add(nuevoBalance);
+                    ingresos.FechaIngreso = DateTime.Now;
                     ingresos.IdBalance = nuevoBalance.IdBalance;
 
                 }

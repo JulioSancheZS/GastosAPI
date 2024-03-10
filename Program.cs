@@ -70,6 +70,7 @@ builder.Services.AddScoped<IMetodoPagoRepository, MetodoPagoRepository>();
 builder.Services.AddScoped<ITasaCambioRepository, TasaCambioRepositoty>();
 builder.Services.AddScoped<ITransaccionRepository, TransaccionRepository>();
 builder.Services.AddScoped<IIngresosRepository, IngresosRepository>();
+builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
 
 builder.Services.AddScoped(serviceProvider =>
 {

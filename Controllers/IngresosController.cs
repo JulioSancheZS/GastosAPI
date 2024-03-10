@@ -76,14 +76,14 @@ namespace GastosAPI.Controllers
                 Guid? idUsuario = ObtenerIdUsuarioDesdeToken();
 
                 Ingreso _ingresos = _mapper.Map<Ingreso>(request);
-                //_ingresos.IdUsuario = idUsuario;
+                _ingresos.IdUsuario = idUsuario;
                 Ingreso newIngreso = await _ingresosRepository.CrearIngresos(_ingresos);
                 if (newIngreso != null)
                 {
                     _responseApi = new ResponseApi<IngresosDTO>() { status = true, msg = "ok", value = _mapper.Map<IngresosDTO>(newIngreso) };
                 }
                 else
-                    _responseApi = new ResponseApi<IngresosDTO>() { status = false, msg = "No se pudo crear la categoria" };
+                    _responseApi = new ResponseApi<IngresosDTO>() { status = false, msg = "No se pudo crear el Ingreso" };
 
                 return StatusCode(StatusCodes.Status200OK, _responseApi);
             }

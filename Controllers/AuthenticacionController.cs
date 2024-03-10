@@ -71,7 +71,7 @@ namespace GastosAPI.Controllers
             try
             {
                 Usuario _usuario = await _authenticationRepository.ObtenerUsuario(x => x.Correo == loginDTO.Correo);
-
+               
                 if (_usuario == null || !VerifyPassword(loginDTO.Password, _usuario.Password, _usuario.PaswordHash))
                 {
                     _responseApi = new ResponseApi<UsuarioDTO> { status = false, msg = "Credenciales inválidas. Intenta nuevamente.", value = null };
