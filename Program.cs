@@ -71,6 +71,8 @@ builder.Services.AddScoped<ITasaCambioRepository, TasaCambioRepositoty>();
 builder.Services.AddScoped<ITransaccionRepository, TransaccionRepository>();
 builder.Services.AddScoped<IIngresosRepository, IngresosRepository>();
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+
 
 builder.Services.AddScoped(serviceProvider =>
 {
