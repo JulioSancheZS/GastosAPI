@@ -2,6 +2,11 @@
 
 Bienvenido a la documentación de la API Rest de Control Gastos. Esta API proporciona funcionalidades para administrar gastos personales.
 
+## Diagrama Módelo Relacional
+
+![Diagrama Módelo Relacional](img/appGastosMR.png)
+
+
 ## Instalación y Requisitos
 
 Para utilizar esta API, asegúrate de tener instalado:
@@ -41,7 +46,7 @@ Este endpoint permite registrar un nuevo usuario en el sistema.
 ```
 #### Códigos de respuesta
 
-- `201 ok`: El usuario se ha registrado correctamente.
+- `200 ok`: El usuario se ha registrado correctamente.
 - `400 Bad Request`: La solicitud contiene datos inválidos.
 - `409 Conflict`: El correo electrónico ya está en uso.
 - `500 Internal Server Error`: Error interno del servidor.
@@ -69,7 +74,7 @@ Este endpoint permite que un usuario registrado inicie sesión en la aplicación.
 ```
 #### Códigos de respuesta
 
-- `201 ok`: El usuario se ha logueado correctamente.
+- `200 ok`: El usuario se ha logueado correctamente.
 - `400 Bad Request`: La solicitud contiene datos inválidos.
 - `401 Unauthorized`: Las credenciales proporcionadas son incorrectas..
 - `500 Internal Server Error`: Error interno del servidor.
@@ -234,6 +239,283 @@ Este endpoint te permite registrar las transacciones en tu cuenta para llevar un
   "producto": "string",
   "monto": 0,
   "fechaTransaccion": "2024-03-10T04:03:50.323Z",
+}
+```
+
+#### Códigos de respuesta
+
+- `200 OK`: La solicitud se completó satisfactoriamente.
+- `401 Unauthorized`: No se proporcionaron credenciales de autenticación válidas.
+- `500 Internal Server Error`: Error interno del servidor.
+
+# CRUDs
+## Categoria
+
+Esta funcionalidad te permite hacer el CRUD de categorias.
+
+## Endpoints
+
+### 1. Obtener Categorias
+
+#### Descripción
+
+Este endpoint te permite obtener las categorias registradas.
+
+#### Método HTTP
+
+`GET`
+
+#### Ruta
+`/api/Categoria`
+
+
+#### Códigos de respuesta
+
+- `200 OK`: La solicitud se completó satisfactoriamente.
+- `401 Unauthorized`: No se proporcionaron credenciales de autenticación válidas.
+- `500 Internal Server Error`: Error interno del servidor.
+
+
+### 2. Registrar Categoría
+
+#### Descripción
+
+Este endpoint te permite registrar las Categorias.
+
+#### Método HTTP
+
+`POST`
+
+#### Ruta
+`/api/Categoria`
+
+
+- #### Cuerpo de la solicitud
+
+- `IdCategoria`:  Este identificador se genera automáticamente en el backend como un GUID único para cada categoria que se registra.
+
+```json
+{
+  "idCategoria": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "nombreCategoria": "string",
+  "icono": "string",
+  "color": "string"
+}
+```
+
+#### Códigos de respuesta
+
+- `200 OK`: La solicitud se completó satisfactoriamente.
+- `401 Unauthorized`: No se proporcionaron credenciales de autenticación válidas.
+- `500 Internal Server Error`: Error interno del servidor.
+
+### 3. Actualizar Categoría
+
+#### Descripción
+
+Este endpoint permite actualizar la información de una categoría existente.
+
+#### Método HTTP
+
+`PUT`
+
+#### Ruta
+`/api/Categoria`
+
+
+- #### Cuerpo de la solicitud
+
+- `IdCategoria`:  El identificador de la categoría se proporciona dentro del objeto "Categoría"
+
+```json
+{
+  "idCategoria": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "nombreCategoria": "string",
+  "icono": "string",
+  "color": "string"
+}
+```
+
+#### Códigos de respuesta
+
+- `200 OK`: La solicitud se completó satisfactoriamente.
+- `401 Unauthorized`: No se proporcionaron credenciales de autenticación válidas.
+- `500 Internal Server Error`: Error interno del servidor.
+
+-----
+
+## Lugar
+
+Esta funcionalidad te permite hacer el CRUD de Lugar.
+
+## Endpoints
+
+### 1. Obtener Lugar
+
+#### Descripción
+
+Este endpoint te permite obtener los Lugares registradas.
+
+#### Método HTTP
+
+`GET`
+
+#### Ruta
+`/api/Lugar`
+
+
+#### Códigos de respuesta
+
+- `200 OK`: La solicitud se completó satisfactoriamente.
+- `401 Unauthorized`: No se proporcionaron credenciales de autenticación válidas.
+- `500 Internal Server Error`: Error interno del servidor.
+
+
+### 2. Registrar Lugar
+
+#### Descripción
+
+Este endpoint te permite registrar el Lugar.
+
+#### Método HTTP
+
+`POST`
+
+#### Ruta
+`/api/Lugar`
+
+
+- #### Cuerpo de la solicitud
+
+- `idLugar`:  Este identificador se genera automáticamente en el backend como un GUID único.
+
+```json
+{
+  "idLugar": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "nombreLugar": "string"
+}
+```
+
+#### Códigos de respuesta
+
+- `200 OK`: La solicitud se completó satisfactoriamente.
+- `401 Unauthorized`: No se proporcionaron credenciales de autenticación válidas.
+- `500 Internal Server Error`: Error interno del servidor.
+
+### 3. Actualizar Lugar
+
+#### Descripción
+
+Este endpoint permite actualizar la información de un Lugar existente.
+
+#### Método HTTP
+
+`PUT`
+
+#### Ruta
+`/api/Lugar`
+
+
+- #### Cuerpo de la solicitud
+
+- `idLugar`:  El identificador del Lugar se proporciona dentro del objeto "Lugar"
+
+```json
+{
+  "idLugar": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "nombreLugar": "string"
+}
+```
+
+#### Códigos de respuesta
+
+- `200 OK`: La solicitud se completó satisfactoriamente.
+- `401 Unauthorized`: No se proporcionaron credenciales de autenticación válidas.
+- `500 Internal Server Error`: Error interno del servidor.
+
+
+-----
+
+## Método de Pago
+
+Esta funcionalidad te permite hacer el CRUD de Método de pago.
+
+## Endpoints
+
+### 1. Obtener Método de pago
+
+#### Descripción
+
+Este endpoint te permite obtener los Metodos de pagos registradas.
+
+#### Método HTTP
+
+`GET`
+
+#### Ruta
+`/api/MetodoPago`
+
+
+#### Códigos de respuesta
+
+- `200 OK`: La solicitud se completó satisfactoriamente.
+- `401 Unauthorized`: No se proporcionaron credenciales de autenticación válidas.
+- `500 Internal Server Error`: Error interno del servidor.
+
+
+### 2. Registrar Método de pago
+
+#### Descripción
+
+Este endpoint te permite registrar el Método de pago.
+
+#### Método HTTP
+
+`POST`
+
+#### Ruta
+`/api/MetodoPago`
+
+
+- #### Cuerpo de la solicitud
+
+- `idMetodoPago`:  Este identificador se genera automáticamente en el backend como un GUID único.
+
+```json
+{
+  "idMetodoPago": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "descripcion": "string"
+}
+```
+
+#### Códigos de respuesta
+
+- `200 OK`: La solicitud se completó satisfactoriamente.
+- `401 Unauthorized`: No se proporcionaron credenciales de autenticación válidas.
+- `500 Internal Server Error`: Error interno del servidor.
+
+### 3. Actualizar Método Pago
+
+#### Descripción
+
+Este endpoint permite actualizar la información de un Método Pago existente.
+
+#### Método HTTP
+
+`PUT`
+
+#### Ruta
+`/api/MetodoPago`
+
+
+- #### Cuerpo de la solicitud
+
+- `idMetodoPago`:  El identificador del Método de pago se proporciona dentro del objeto "MetodoPago"
+
+```json
+{
+  "idMetodoPago": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "descripcion": "string"
 }
 ```
 
