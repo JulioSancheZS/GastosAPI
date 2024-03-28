@@ -40,9 +40,9 @@ namespace GastosAPI.Repository.Implementacion
         }
 
        
-        public async Task<Dictionary<string, int>> GastosUltimasSemanas()
+        public async Task<Dictionary<string, (int totalTransacciones, decimal? totalGastos)>> GastosUltimasSemanas()
         {
-            Dictionary<string, int> resultado = new Dictionary<string, int>();
+            Dictionary<string, (int totalTransacciones, decimal? totalGastos)> resultado = new Dictionary<string, (int totalTransacciones, decimal? totalGastos)>();
             try
             {
                 IQueryable<Transaccion> _trasaccionesQuery = _context.Transaccions.AsQueryable();
@@ -61,8 +61,12 @@ namespace GastosAPI.Repository.Implementacion
                     resultado = resultados
                         .GroupBy(v => v.FechaTransaccion.Value.Date)
                         .OrderBy(g => g.Key)
-                        .Select(dv => new { fecha = dv.Key.ToString("dd/MM/yyyy"), total = dv.Count() })
-                        .ToDictionary(keySelector: r => r.fecha, elementSelector: r => r.total);
+                        .Select(dv => new { 
+                            fecha = dv.Key.ToString("dd/MM/yyyy"),
+                            totalTransacciones = dv.Count(),
+                            totalGastos = dv.Sum(t => t.Monto)
+                        })
+                    .ToDictionary(keySelector: r => r.fecha, elementSelector: r => (r.totalTransacciones, r.totalGastos));
                 }
 
                 return resultado;

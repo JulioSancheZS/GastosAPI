@@ -32,6 +32,7 @@ namespace GastosAPI.Controllers
             {
                 List<TransaccionDTO> _lista = new List<TransaccionDTO>();
                 _lista = _mapper.Map<List<TransaccionDTO>>(await _dashboardRepository.UltimosGastos());
+                
 
                 if (_lista.Count > 0)
                 {
@@ -55,7 +56,7 @@ namespace GastosAPI.Controllers
         [Route("resumen")]
         public async Task<IActionResult> Resumen()
         {
-            ResponseApi<DashboardDTO> _responseApi = new ResponseApi<DashboardDTO>();
+            ResponseApi<List<GastosSemanaDTO>> _responseApi = new ResponseApi<List<GastosSemanaDTO>>();
 
             try
             {
@@ -63,23 +64,24 @@ namespace GastosAPI.Controllers
 
                 List<GastosSemanaDTO> listaVentasSemana = new List<GastosSemanaDTO>();
 
-                foreach (KeyValuePair<string, int> item in await _dashboardRepository.GastosUltimasSemanas())
+                foreach (KeyValuePair<string, (int totalTransacciones, decimal? totalGastos)> item in await _dashboardRepository.GastosUltimasSemanas())
                 {
                     listaVentasSemana.Add(new GastosSemanaDTO()
                     {
                         Fecha = item.Key,
-                        Total = item.Value
+                        TotalTransacciones = item.Value.totalTransacciones,
+                        TotalGastos = item.Value.totalGastos
                     });
                 }
                 vmDashboard.GastosUltimaSemana = listaVentasSemana;
 
-                _responseApi = new ResponseApi<DashboardDTO>() { status = true, msg = "ok", value = vmDashboard };
+                _responseApi = new ResponseApi<List<GastosSemanaDTO>>() { status = true, msg = "ok", value = listaVentasSemana };
                 return StatusCode(StatusCodes.Status200OK, _responseApi);
 
             }
             catch (Exception ex)
             {
-                _responseApi = new ResponseApi<DashboardDTO>() { status = false, msg = ex.Message, value = null };
+                _responseApi = new ResponseApi<List<GastosSemanaDTO>>() { status = false, msg = ex.Message, value = null };
                 return StatusCode(StatusCodes.Status500InternalServerError, _responseApi);
             }
         }
