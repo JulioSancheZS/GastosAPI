@@ -2,6 +2,7 @@
 using GastosAPI.Repository.Contrato;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace GastosAPI.Repository.Implementacion
@@ -14,13 +15,13 @@ namespace GastosAPI.Repository.Implementacion
         {
             _context = context;
         }
-
-        public async Task<List<(decimal? TotalGastos, string? NombreCategoria)>> GastosPorCategoriaPorDia(DateTime fecha)
+        //Gastos Por Fecha
+        public async Task<List<(decimal? TotalGastos, string? NombreCategoria)>> GastosPorCategoriaPorFecha(DateTime fecha)
         {
             try
             {
                 var gastosPorCategoria = await _context.Transaccions
-                .Where(t =>  t.FechaTransaccion.Value.Day == fecha.Day)
+                .Where(t =>  t.FechaTransaccion.Value == fecha)
                     .GroupBy(t => t.IdCategoriaNavigation.NombreCategoria)
                     .Select(g => new
                     {
@@ -38,7 +39,6 @@ namespace GastosAPI.Repository.Implementacion
                 throw;
             }
         }
-
        
         public async Task<Dictionary<string, (int totalTransacciones, decimal? totalGastos)>> GastosUltimasSemanas()
         {
@@ -137,6 +137,40 @@ namespace GastosAPI.Repository.Implementacion
             }
             catch
             {
+                throw;
+            }
+        }
+        //Total Gastos del mes Actual
+        public async Task<int> TotalNumGastos()
+        {
+            try
+            {
+                //Mes Actual
+                DateTime now = DateTime.Now;
+
+                var totalNumGastos = await _context.Transaccions.Where(x => x.FechaTransaccion.Value.Month == now.Month).CountAsync();
+
+                return totalNumGastos;
+            }
+            catch 
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<decimal> TotalGastosDinero()
+        {
+            try
+            {
+                DateTime now =  DateTime.Now;
+                decimal? totalMesGastos = await _context.Transaccions.Where(x => x.FechaTransaccion.Value.Month == now.Month).SumAsync(t => t.Monto);
+            
+                return (decimal)totalMesGastos;
+            }
+            catch 
+            {
+
                 throw;
             }
         }

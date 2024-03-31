@@ -87,23 +87,31 @@ namespace GastosAPI.Controllers
         }
 
         [HttpGet]
-        [Route("gastosPorCategoriaPorDia")]
-
-        public async Task<ActionResult<List<GastosPorCategoriaDTO>>> GetGastosPorCategoriaPorDia(DateTime fecha)
+        [Route("gastosPorCategoriaPorFecha")]
+        public async Task<ActionResult<List<GastosPorCategoriaDTO>>> GetGastosPorCategoriaPorFecha(DateTime fecha)
         {
             ResponseApi<List<GastosPorCategoriaDTO>> _responseApi = new ResponseApi<List<GastosPorCategoriaDTO>>();
 
             try
             {
-                var gastosPorCategoria = await _dashboardRepository.GastosPorCategoriaPorDia(fecha);
+                var gastosPorCategoria = await _dashboardRepository.GastosPorCategoriaPorFecha(fecha);
 
-                var gastosPorCategoriaDTO = gastosPorCategoria.Select(g => new GastosPorCategoriaDTO
+                if (gastosPorCategoria.Count > 0)
                 {
-                    TotalGastos = g.TotalGastos,
-                    NombreCategoria = g.NombreCategoria
-                }).ToList();
+                    var gastosPorCategoriaDTO = gastosPorCategoria.Select(g => new GastosPorCategoriaDTO
+                    {
+                        TotalGastos = g.TotalGastos,
+                        NombreCategoria = g.NombreCategoria
+                    }).ToList();
+                    _responseApi = new ResponseApi<List<GastosPorCategoriaDTO>>() { status = true, msg = "ok", value = gastosPorCategoriaDTO };
+                }
+                else
+                {
+                    _responseApi = new ResponseApi<List<GastosPorCategoriaDTO>>() { status = true, msg = "Sin Resultados", value = null };
 
-                _responseApi = new ResponseApi<List<GastosPorCategoriaDTO>>() { status = true, msg = "ok", value = gastosPorCategoriaDTO };
+                }
+
+
                 return StatusCode(StatusCodes.Status200OK, _responseApi);
 
             }
@@ -166,6 +174,48 @@ namespace GastosAPI.Controllers
             catch (Exception ex)
             {
                 _responseApi = new ResponseApi<List<GastosPorCategoriaDTO>>() { status = false, msg = ex.Message, value = null };
+                return StatusCode(StatusCodes.Status500InternalServerError, _responseApi);
+            }
+        }
+
+        [HttpGet]
+        [Route("totalNumGastos")]
+        public async Task<IActionResult> GetNumGastosMes()
+        {
+            ResponseApi<int> _responseApi = new ResponseApi<int>();
+            try
+            {
+                var numGastos = await _dashboardRepository.TotalNumGastos();
+
+                _responseApi = new ResponseApi<int>() { status = true, msg = "ok", value = numGastos };
+                return StatusCode(StatusCodes.Status200OK, _responseApi);
+
+            }
+            catch (Exception ex)
+            {
+                _responseApi = new ResponseApi<int>() { status = false, msg = ex.Message, value = 0 };
+                return StatusCode(StatusCodes.Status500InternalServerError, _responseApi);
+            }
+        }
+
+        [HttpGet]
+        [Route("totalGastos")]
+        public async Task<IActionResult> GetTotalGastosMes()
+        {
+            ResponseApi<decimal> _responseApi = new ResponseApi<decimal>();
+            try
+            {
+
+                var totalGastos = await _dashboardRepository.TotalGastosDinero();
+
+
+                _responseApi = new ResponseApi<decimal>() { status = true, msg = "ok", value = totalGastos };
+                return StatusCode(StatusCodes.Status200OK, _responseApi);
+
+            }
+            catch (Exception ex)
+            {
+                _responseApi = new ResponseApi<decimal>() { status = false, msg = ex.Message, value = 0 };
                 return StatusCode(StatusCodes.Status500InternalServerError, _responseApi);
             }
         }
