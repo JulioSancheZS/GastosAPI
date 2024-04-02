@@ -4,6 +4,7 @@ using GastosAPI.Models;
 using GastosAPI.Repository.Contrato;
 using GastosAPI.Repository.Implementacion;
 using GastosAPI.Utilidades;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace GastosAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TransaccionController : ControllerBase
     {
         public readonly IMapper _mapper;

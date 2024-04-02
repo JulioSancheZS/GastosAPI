@@ -3,6 +3,7 @@ using GastosAPI.DTO;
 using GastosAPI.Models;
 using GastosAPI.Repository.Contrato;
 using GastosAPI.Utilidades;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace GastosAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TasaCambioController : ControllerBase
     {
         public readonly ITasaCambioRepository _tasaCambioRepository;

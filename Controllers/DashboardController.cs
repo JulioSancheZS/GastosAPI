@@ -4,6 +4,7 @@ using GastosAPI.DTO;
 using GastosAPI.Repository.Contrato;
 using GastosAPI.Repository.Implementacion;
 using GastosAPI.Utilidades;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace GastosAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DashboardController : ControllerBase
     {
         public readonly IMapper _mapper;
@@ -22,6 +24,19 @@ namespace GastosAPI.Controllers
             _dashboardRepository = dashboardRepository;
         }
 
+        private Guid? ObtenerIdUsuarioDesdeToken()
+        {
+            var claim = User.Claims.FirstOrDefault(c => c.Type == "IdUsuario");
+
+            if (claim != null && Guid.TryParse(claim.Value, out Guid idUsuario))
+            {
+                return idUsuario;
+            }
+
+            // Manejar el caso donde no se puede obtener el IdUsuario
+            return null;
+
+        }
         [HttpGet]
         [Route("ultimosGastos")]
         public async Task<IActionResult> getUltimosGastos()
@@ -30,8 +45,10 @@ namespace GastosAPI.Controllers
 
             try
             {
+                Guid? idUsuario = ObtenerIdUsuarioDesdeToken();
+
                 List<TransaccionDTO> _lista = new List<TransaccionDTO>();
-                _lista = _mapper.Map<List<TransaccionDTO>>(await _dashboardRepository.UltimosGastos());
+                _lista = _mapper.Map<List<TransaccionDTO>>(await _dashboardRepository.UltimosGastos(idUsuario));
                 
 
                 if (_lista.Count > 0)
@@ -61,10 +78,11 @@ namespace GastosAPI.Controllers
             try
             {
                 DashboardDTO vmDashboard = new DashboardDTO();
+                Guid? idUsuario = ObtenerIdUsuarioDesdeToken();
 
                 List<GastosSemanaDTO> listaVentasSemana = new List<GastosSemanaDTO>();
 
-                foreach (KeyValuePair<string, (int totalTransacciones, decimal? totalGastos)> item in await _dashboardRepository.GastosUltimasSemanas())
+                foreach (KeyValuePair<string, (int totalTransacciones, decimal? totalGastos)> item in await _dashboardRepository.GastosUltimasSemanas(idUsuario))
                 {
                     listaVentasSemana.Add(new GastosSemanaDTO()
                     {
@@ -94,7 +112,9 @@ namespace GastosAPI.Controllers
 
             try
             {
-                var gastosPorCategoria = await _dashboardRepository.GastosPorCategoriaPorFecha(fecha);
+                Guid? idUsuario = ObtenerIdUsuarioDesdeToken();
+
+                var gastosPorCategoria = await _dashboardRepository.GastosPorCategoriaPorFecha(fecha, idUsuario);
 
                 if (gastosPorCategoria.Count > 0)
                 {
@@ -185,7 +205,9 @@ namespace GastosAPI.Controllers
             ResponseApi<int> _responseApi = new ResponseApi<int>();
             try
             {
-                var numGastos = await _dashboardRepository.TotalNumGastos();
+                Guid? idUsuario = ObtenerIdUsuarioDesdeToken();
+
+                var numGastos = await _dashboardRepository.TotalNumGastos(idUsuario);
 
                 _responseApi = new ResponseApi<int>() { status = true, msg = "ok", value = numGastos };
                 return StatusCode(StatusCodes.Status200OK, _responseApi);
@@ -205,8 +227,9 @@ namespace GastosAPI.Controllers
             ResponseApi<decimal> _responseApi = new ResponseApi<decimal>();
             try
             {
+                Guid? idUsuario = ObtenerIdUsuarioDesdeToken();
 
-                var totalGastos = await _dashboardRepository.TotalGastosDinero();
+                var totalGastos = await _dashboardRepository.TotalGastosDinero(idUsuario);
 
 
                 _responseApi = new ResponseApi<decimal>() { status = true, msg = "ok", value = totalGastos };

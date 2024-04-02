@@ -16,12 +16,12 @@ namespace GastosAPI.Repository.Implementacion
             _context = context;
         }
         //Gastos Por Fecha
-        public async Task<List<(decimal? TotalGastos, string? NombreCategoria)>> GastosPorCategoriaPorFecha(DateTime fecha)
+        public async Task<List<(decimal? TotalGastos, string? NombreCategoria)>> GastosPorCategoriaPorFecha(DateTime fecha, Guid? IdUsuario)
         {
             try
             {
                 var gastosPorCategoria = await _context.Transaccions
-                .Where(t =>  t.FechaTransaccion.Value == fecha)
+                .Where(t =>  t.FechaTransaccion.Value == fecha && t.IdUsuario == IdUsuario)
                     .GroupBy(t => t.IdCategoriaNavigation.NombreCategoria)
                     .Select(g => new
                     {
@@ -40,7 +40,7 @@ namespace GastosAPI.Repository.Implementacion
             }
         }
        
-        public async Task<Dictionary<string, (int totalTransacciones, decimal? totalGastos)>> GastosUltimasSemanas()
+        public async Task<Dictionary<string, (int totalTransacciones, decimal? totalGastos)>> GastosUltimasSemanas(Guid? IdUsuario)
         {
             Dictionary<string, (int totalTransacciones, decimal? totalGastos)> resultado = new Dictionary<string, (int totalTransacciones, decimal? totalGastos)>();
             try
@@ -52,7 +52,7 @@ namespace GastosAPI.Repository.Implementacion
                     DateTime? ultimaFecha = _context.Transaccions.OrderByDescending(x => x.FechaTransaccion).Select(x => x.FechaTransaccion).FirstOrDefault();
                     ultimaFecha = ultimaFecha.Value.AddDays(-7);
 
-                    IQueryable<Transaccion> query = _context.Transaccions.Where(v => v.FechaTransaccion.Value.Date >= ultimaFecha.Value.Date);
+                    IQueryable<Transaccion> query = _context.Transaccions.Where(v => v.FechaTransaccion.Value.Date >= ultimaFecha.Value.Date && v.IdUsuario == IdUsuario);
 
                     // Ejecutar la primera operación de lectura y almacenar los resultados en una lista
                     var resultados = await query.ToListAsync();
@@ -78,11 +78,11 @@ namespace GastosAPI.Repository.Implementacion
         }
 
 
-        public async Task<IQueryable<Transaccion>> UltimosGastos()
+        public async Task<IQueryable<Transaccion>> UltimosGastos(Guid? IdUsuario)
         {
             try
             {
-                IQueryable<Transaccion> query = _context.Transaccions.OrderByDescending(x => x.FechaTransaccion).Take(5);
+                IQueryable<Transaccion> query = _context.Transaccions.OrderByDescending(x => x.FechaTransaccion).Take(5).Where(u => u.IdUsuario == IdUsuario);
                 return query;
             }
             catch
@@ -141,14 +141,14 @@ namespace GastosAPI.Repository.Implementacion
             }
         }
         //Total Gastos del mes Actual
-        public async Task<int> TotalNumGastos()
+        public async Task<int> TotalNumGastos(Guid? IdUsuario)
         {
             try
             {
                 //Mes Actual
                 DateTime now = DateTime.Now;
 
-                var totalNumGastos = await _context.Transaccions.Where(x => x.FechaTransaccion.Value.Month == now.Month).CountAsync();
+                var totalNumGastos = await _context.Transaccions.Where(x => x.FechaTransaccion.Value.Month == now.Month && x.IdUsuario == IdUsuario).CountAsync();
 
                 return totalNumGastos;
             }
@@ -159,12 +159,12 @@ namespace GastosAPI.Repository.Implementacion
             }
         }
 
-        public async Task<decimal> TotalGastosDinero()
+        public async Task<decimal> TotalGastosDinero(Guid? IdUsuario)
         {
             try
             {
                 DateTime now =  DateTime.Now;
-                decimal? totalMesGastos = await _context.Transaccions.Where(x => x.FechaTransaccion.Value.Month == now.Month).SumAsync(t => t.Monto);
+                decimal? totalMesGastos = await _context.Transaccions.Where(x => x.FechaTransaccion.Value.Month == now.Month && x.IdUsuario == IdUsuario).SumAsync(t => t.Monto);
             
                 return (decimal)totalMesGastos;
             }

@@ -4,6 +4,7 @@ using GastosAPI.Models;
 using GastosAPI.Repository.Contrato;
 using GastosAPI.Repository.Implementacion;
 using GastosAPI.Utilidades;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace GastosAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BalanceController : ControllerBase
     {
         public readonly IMapper _mapper;
